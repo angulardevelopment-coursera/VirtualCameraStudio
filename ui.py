@@ -1,8 +1,11 @@
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import (
+    QMainWindow,
+    QFileDialog
+)
 
 from videocanvas import VideoCanvas
 
-import cv2
+from videoplayer import VideoPlayer
 
 class MainWindow(QMainWindow):
 
@@ -12,20 +15,39 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Virtual Camera Studio")
 
-        self.resize(1400,900)
+        self.resize(1400, 900)
 
         self.canvas = VideoCanvas()
 
+        self.player = VideoPlayer()
+
+        self.canvas.setPlayer(self.player)
+
         self.setCentralWidget(self.canvas)
-        
-    def loadVideo(self, filename):
 
-        self.cap = cv2.VideoCapture(filename)
+        fileMenu = self.menuBar().addMenu("&File")
 
-        ok, frame = self.cap.read()
+        openAction = fileMenu.addAction("Open Video")
 
-        if ok:
+        openAction.triggered.connect(self.openVideo)
 
-            self.frame = frame
+    def openVideo(self):
 
-            self.update()
+        filename, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open Video",
+            "",
+            "Videos (*.mov *.mp4 *.avi)"
+        )
+
+        if filename:
+
+            if self.player.open(filename):
+
+                self.canvas.update()
+
+                self.statusBar().showMessage(
+                    f"{self.player.width} × {self.player.height}    "
+                    f"{self.player.fps:.2f} fps    "
+                    f"{self.player.duration():.2f} sec"
+                )
