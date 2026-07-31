@@ -3,9 +3,13 @@ from PySide6.QtWidgets import (
     QFileDialog
 )
 
+from PySide6.QtGui import QGuiApplication
+
 from videocanvas import VideoCanvas
 
 from videoplayer import VideoPlayer
+
+import os
 
 class MainWindow(QMainWindow):
 
@@ -14,9 +18,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Virtual Camera Studio")
-
-        self.resize(1400, 900)
-
+        
         self.canvas = VideoCanvas()
 
         self.player = VideoPlayer()
@@ -25,12 +27,18 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.canvas)
 
+        status = self.statusBar()
+        
+        status.showMessage("Ready")
+
         fileMenu = self.menuBar().addMenu("&File")
 
         openAction = fileMenu.addAction("Open Video")
 
         openAction.triggered.connect(self.openVideo)
 
+        self.showMaximized()
+        
     def openVideo(self):
 
         filename, _ = QFileDialog.getOpenFileName(
@@ -46,7 +54,10 @@ class MainWindow(QMainWindow):
 
                 self.canvas.update()
 
+                video_name = os.path.basename(filename)
+
                 self.statusBar().showMessage(
+                    f"{video_name}    "
                     f"{self.player.width} × {self.player.height}    "
                     f"{self.player.fps:.2f} fps    "
                     f"{self.player.duration():.2f} sec"

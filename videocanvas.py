@@ -10,14 +10,14 @@ class VideoCanvas(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setMinimumSize(800, 600)
-
         self.player = None
+        
     def setPlayer(self, player):
 
         self.player = player
 
         self.update()
+        
     def loadVideo(self, filename):
 
         cap = cv2.VideoCapture(filename)
