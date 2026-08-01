@@ -1,13 +1,13 @@
 # Project To-Do List: Video Camera Control
 
 ## Phase 1: Core Functionality (Video Loading & Display)
-- [ ] Fix `ui.py` structure and method definitions.
-- [ ] Implement video loading mechanism in `MainWindow` and pass it to `VideoCanvas`.
-- [ ] Implement `VideoCanvas` to render the current video frame using OpenCV and PySide6.
+- [X] Fix `ui.py` structure and method definitions.
+- [X] Implement video loading mechanism in `MainWindow` and pass it to `VideoCanvas`.
+- [X] Implement `VideoCanvas` to render the current video frame using OpenCV and PySide6.
 - [ ] Integrate `Project` model to store video information.
 
 ## Phase 2: Camera & Bounding Box (The "Virtual Camera")
-- [ ] Implement the visual representation of the bounding box (the "Camera") on the `VideoCanvas`.
+- [X] Implement the visual representation of the bounding box (the "Camera") on the `VideoCanvas`.
 - [ ] Implement mouse interaction for moving the bounding box (Left click and drag).
 - [ ] Implement mouse wheel interaction for zooming.
 - [ ] Implement corner handles for resizing the bounding box.
