@@ -1,6 +1,16 @@
+"""
+VideoCanvas
+
+Responsible only for drawing the current video frame
+and any overlays (crop rectangle, guides, handles,
+safe areas, etc.)
+
+Does NOT decode video.
+"""
 from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPainter, QColor, QImage
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QPen
 
 import cv2
 
@@ -18,34 +28,6 @@ class VideoCanvas(QWidget):
 
         self.update()
         
-    def loadVideo(self, filename):
-
-        cap = cv2.VideoCapture(filename)
-
-        ok, frame = cap.read()
-
-        cap.release()
-
-        if not ok:
-            print("Couldn't load video.")
-            return
-
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-        h, w, ch = frame.shape
-
-        bytesPerLine = ch * w
-
-        self.image = QImage(
-            frame.data,
-            w,
-            h,
-            bytesPerLine,
-            QImage.Format_RGB888
-        ).copy()
-
-        self.update()
-
     def paintEvent(self, event):
 
         painter = QPainter(self)
@@ -64,13 +46,37 @@ class VideoCanvas(QWidget):
 
             return
 
-        scaled = self.player.currentImage().scaled(
+        image = self.player.currentImage()
+
+        scaled = image.scaled(
             self.size(),
             Qt.KeepAspectRatio,
             Qt.SmoothTransformation
         )
 
-        x = (self.width()-scaled.width())//2
-        y = (self.height()-scaled.height())//2
+        offset_x = (self.width() - scaled.width()) // 2
+        offset_y = (self.height() - scaled.height()) // 2
 
-        painter.drawImage(x, y, scaled)
+        painter.drawImage(offset_x, offset_y, scaled)
+        
+        
+        
+        pen = QPen(Qt.red)
+        pen.setWidth(3)
+
+        painter.setPen(pen)
+        
+        camera_width = scaled.width() * 0.8
+        camera_height = camera_width * 9 / 16
+        
+        camera_x = offset_x + (scaled.width() - camera_width) / 2
+        camera_y = offset_y + (scaled.height() - camera_height) / 2
+        
+        painter.drawRect(
+            int(camera_x),
+            int(camera_y),
+            int(camera_width),
+            int(camera_height)
+        )
+        
+        

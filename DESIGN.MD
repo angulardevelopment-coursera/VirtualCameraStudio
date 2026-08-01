@@ -1,0 +1,1 @@
+All editing operations use original video coordinates. The preview only displays a scaled representation.

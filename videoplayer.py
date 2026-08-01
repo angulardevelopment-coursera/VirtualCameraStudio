@@ -1,3 +1,11 @@
+"""
+VideoPlayer
+
+Responsible for opening videos, decoding frames,
+and providing the current frame as a QImage.
+
+Does NOT draw anything.
+"""
 import cv2
 from PySide6.QtGui import QImage
 

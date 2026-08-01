@@ -1,3 +1,8 @@
+"""
+project
+
+Handles config and accepts details on what gets edited and how
+"""
 from dataclasses import dataclass, field
 
 @dataclass
